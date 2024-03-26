@@ -29,7 +29,6 @@ def backup_table(table_name: str, db: Session = Depends(get_db), page_size: int 
     try:
         # Get the table metadata based on the table name
         table = Base.metadata.tables.get(table_name)
-        logger.error(f'Base.metadata.tables.get(table_name) :: {table} ')
         if table is None:
             raise HTTPException(status_code=404, detail=f"Table '{table_name}' does not exist")
 
@@ -37,8 +36,6 @@ def backup_table(table_name: str, db: Session = Depends(get_db), page_size: int 
         os.makedirs(backup_dir, exist_ok=True)
 
         backup_file = os.path.join(backup_dir, f'{table_name}.avro')
-
-        logger.error(f'testing :: { [ ( column.name, get_avro_type(column)) for column in table.columns] } ')
 
         schema = {
             'name': table_name,
